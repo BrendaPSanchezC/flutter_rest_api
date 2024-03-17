@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rest_api/pages/home_page.dart';
+import 'package:flutter_rest_api/pages/login_page.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rest_api/pages/register_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,13 +20,18 @@ class MyApp extends StatelessWidget {
 
     ]);
     return MaterialApp(
+      debugShowCheckedModeBanner : false,
       title: 'Flutter Demo',
       theme: ThemeData(
 
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      home: LoginPage(),
+      routes: {
+        RegisterPage.routeNAme : (_) => RegisterPage(),
+        LoginPage.routeName : (_) => LoginPage()
+      },
     );
   }
 }

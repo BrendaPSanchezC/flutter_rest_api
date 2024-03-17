@@ -1,23 +1,25 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_rest_api/utils/responsive.dart';
+import 'package:flutter_rest_api/widgets/avatar_button.dart';
 import 'package:flutter_rest_api/widgets/circle.dart';
-import 'package:flutter_rest_api/widgets/icon_container.dart';
-import 'package:flutter_rest_api/widgets/login_form.dart';
+import 'package:flutter_rest_api/widgets/register_form.dart';
 
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+  static const routeNAme = 'register';
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<RegisterPage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
   final Responsive responsive = Responsive.of(context);
 
-   final double pinkSize = responsive.wp(80);
+   final double pinkSize = responsive.wp(88);
       final double orangeSize = responsive.wp(57);
 
     return Scaffold(
@@ -34,7 +36,7 @@ class _HomePageState extends State<HomePage> {
             alignment: Alignment.center, //Para alinear
             children: <Widget>[
            Positioned( //Circulo rosa
-                top: -pinkSize * 0.4,
+                top: -pinkSize * 0.3,
                 right: -pinkSize * 0.2,
                 child: Circle(
               size: pinkSize,
@@ -45,7 +47,7 @@ class _HomePageState extends State<HomePage> {
           ),
           ),
             Positioned(//Circulo naranja
-                top: -orangeSize * 0.55,
+                top: -orangeSize * 0.35,
                 left: -orangeSize * 0.15,
                 child: Circle(
               size: orangeSize,
@@ -55,26 +57,39 @@ class _HomePageState extends State<HomePage> {
               ],
           ),
           ),
+          //Ventana de registro
           Positioned(//Icono
-            top: pinkSize * 0.35,
+            top: pinkSize * 0.22,
             child: Column(
             children: <Widget>[ 
-            IconContainer(
-              size: responsive.wp(17),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Text("Hello Again\nWelcome Back!",
+            Text("Hello Again\nSing up to get started.",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: responsive.dp(3),
+            style: TextStyle(fontSize: responsive.dp(1.6),
+            color: Colors.white,
              ),
+            ),
+            SizedBox(height: responsive.dp(4.5),
+            ),
+            AvatarButton(
+              imageSize: responsive.wp(25),
             )
             ],
             ),
           ),
-        
-          LoginForm()
+          RegisterForm(),
+          Positioned(
+            left: 15,
+            top: 15,
+            child: SafeArea(child: CupertinoButton(
+            color: Colors.black26,
+          padding: EdgeInsets.all(10),
+          borderRadius: BorderRadius.circular(30),
+            child: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          ),)
+          )
             ],
              )
                        ,)

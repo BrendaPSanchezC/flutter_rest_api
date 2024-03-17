@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rest_api/utils/responsive.dart';
 import 'input_text.dart';
-class LoginForm extends StatefulWidget {
+class RegisterForm extends StatefulWidget {
  // const LoginForm({super.key});
  @override
- _LoginFormState createState() => _LoginFormState();
+ _RegisterFormState createState() => _RegisterFormState();
 }
-class _LoginFormState extends State<LoginForm> {
+class _RegisterFormState extends State<RegisterForm> {
   
 
 
   GlobalKey<FormState> _formKey = GlobalKey();
-  String _email='', _password='';
+  String _email='', _password='', _username='';
 
   _submit(){//metodo privado
  final isOk = _formKey.currentState?.validate();
@@ -40,6 +40,21 @@ class _LoginFormState extends State<LoginForm> {
           children: <Widget>[
           InputText(
             keyboardType: TextInputType.emailAddress,
+            label: "USERNAME",
+            fontSize: responsive.dp(responsive.isTablet ? 1.2: 1.4),
+            onChanged: (text){
+              _username = text;
+            },
+            validator: (text){
+              if(text!.trim().length < 5){
+                return "invalid username";
+              }
+              return null;
+            },
+            ),
+            SizedBox(height: responsive.dp(2)),
+             InputText(
+            keyboardType: TextInputType.emailAddress,
             label: "EMAIL ADDRESS",
             fontSize: responsive.dp(responsive.isTablet ? 1.2: 1.4),
             onChanged: (text){
@@ -53,40 +68,19 @@ class _LoginFormState extends State<LoginForm> {
             },
             ),
             SizedBox(height: responsive.dp(2)),
-            Container(
-              decoration: BoxDecoration(
-                border: Border( bottom: BorderSide(
-                  color: Colors.black12,
-                ),
-                ),
-                ),
-              child: Row(
-              children: <Widget>[
-                Expanded(child: InputText(
+             InputText(
+            keyboardType: TextInputType.emailAddress,
             label: "PASSWORD",
-            obscureText: true,
-            borderEnable: false,
             fontSize: responsive.dp(responsive.isTablet ? 1.2: 1.4),
-             onChanged: (text){
+            onChanged: (text){
               _password = text;
             },
             validator: (text){
-              if(text?.trim().length==0){
+              if(text!.trim().length < 6){
                 return "invalid password";
               }
               return null;
             },
-            ),
-            ),
-            Padding(padding: const EdgeInsets.symmetric(vertical: 10),
-            child:  TextButton(
-              child: Text("Forgot Password",style: TextStyle(fontWeight: FontWeight.bold, fontSize: responsive.dp(responsive.isTablet ? 1.2: 1.5)),
-              ),
-            onPressed: () {},
-            ),
-            ),
-              ],
-            ),
             ),
             SizedBox(height: responsive.dp(5)),
           Padding(
@@ -100,7 +94,7 @@ class _LoginFormState extends State<LoginForm> {
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Text(
-              "Sing in",
+              "Sing up",
               style: TextStyle(color: Colors.white,
               fontSize: responsive.dp(1.5),
               ),
@@ -114,15 +108,15 @@ class _LoginFormState extends State<LoginForm> {
               Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-              Text("New to friendly Desi?", style: TextStyle(fontSize: responsive.dp(1.5),
-              
+              Text("ALready have an account?", 
+              style: TextStyle(fontSize: responsive.dp(1.5),
               ),
               ),
               TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, 'register');
+                Navigator.pop(context);
               }, 
-              child: Text("Sing up",
+              child: Text("Sing in",
               style: TextStyle(color: Colors.pinkAccent, fontSize: responsive.dp(1.5),
               ),
               ),
