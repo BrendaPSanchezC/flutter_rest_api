@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rest_api/api/authentication_api.dart';
+import 'package:flutter_rest_api/data/authentication_client.dart';
 import 'package:flutter_rest_api/pages/home_page.dart';
 import 'package:flutter_rest_api/utils/dialogs.dart';
 import 'package:flutter_rest_api/utils/responsive.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
 import 'input_text.dart';
 class RegisterForm extends StatefulWidget {
  // const LoginForm({super.key});
@@ -14,34 +14,28 @@ class RegisterForm extends StatefulWidget {
  _RegisterFormState createState() => _RegisterFormState();
 }
 class _RegisterFormState extends State<RegisterForm> {
-  
-
-
+  final _authenticationAPI=GetIt.instance<AuthenticationAPI>();
+  final _authenticationClient = GetIt.instance<AuthenticationClient>();
   GlobalKey<FormState> _formKey = GlobalKey();
   String _email='', _password='', _username='';
-  Logger _logger = Logger();
+ 
 
 
   Future<void> _submit() async {//metodo privado
  final isOk = _formKey.currentState?.validate() ?? false;
- print("form isOk $isOk");
 
  if(isOk){
   ProgressDialog.show(context);
-  final authenticationAPI=GetIt.instance<AuthenticationAPI>();
-  final response = await authenticationAPI.register(//await para esperar que termine la tarea
+  final response = await _authenticationAPI.register(//await para esperar que termine la tarea
     username: _username,
     email: _email,
     password: _password 
     );
     ProgressDialog.dissmiss(context);
     if(response.data != null){
-      _logger.i("register ok::: ${response.data}");//si se creo correctamente saldra este mensaje
+     await _authenticationClient.saveSession(response.data!);
       Navigator.pushNamedAndRemoveUntil(context, HomePage.routeName, (_) => false,);
     }else{
-      _logger.e("register error status code ${response.error!.statusCode}");//el estatus del error 
-      _logger.e("register error message ${response.error!.message}");//el mensaje que se mostrara
-      _logger.e("register error data ${response.error!.data}");//Los datos que estan causando error
       //Para mostrar los errores en la pantalla
       String message = response.error!.message;
       if(response.error?.statusCode == -1){

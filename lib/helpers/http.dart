@@ -1,22 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_rest_api/helpers/http_response.dart';
-import 'package:logger/logger.dart';
+import 'package:flutter_rest_api/utils/logs.dart';
 
 class Http{
-  Dio _dio;
-  Logger _logger;
-  bool _logsEnabled;
+ late Dio _dio;
+ late bool _logsEnabled;
 
-  Http ({required Dio dio, required Logger logger, required bool logsEnabled}){
+  Http ({required Dio dio, required bool logsEnabled}){
     _dio = dio;
-    _logger = logger;
     _logsEnabled = logsEnabled;
   } 
 
-  Future<HttpResponse> request(String path, {String method="GET",
+  Future<HttpResponse<T>> request<T>(String path, {String method="GET",
   Map<String, dynamic>? queryParameters,
   Map<String, dynamic>? data,
+  Map<String, dynamic>? formData,
   Map<String, String>? headers,
+  T Function (dynamic data)? parser,//Se encarga de convertir el map a una instancia de AuthenticationAPI
   }) async{
      try{
         final response = await _dio.request(
@@ -26,18 +26,22 @@ class Http{
             headers: headers,
           ),
           queryParameters: queryParameters,
-          data: data,
+          data: formData != null ? FormData.fromMap(formData): data,
         
       );
-      _logger.i(response.data);
-        return HttpResponse.success(response.data);
+      Logs.p.i(response.data);
+        if(parser != null){
+          return HttpResponse.success<T>(parser(response.data));
+        }
+        return HttpResponse.success<T>(response.data);
        }catch(e){
-        _logger.e(e);
+        Logs.p.e(e);
 
-        int statusCode = -1;//Para errores
+        int statusCode = 0;//Para errores
         String message = "unknown error";
         dynamic data;
         if(e is DioError){
+          statusCode = -1;
           message = e.message;
           if(e.response != null){
             statusCode= e.response!.statusCode!;

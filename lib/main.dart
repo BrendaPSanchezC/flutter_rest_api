@@ -4,6 +4,7 @@ import 'package:flutter_rest_api/pages/home_page.dart';
 import 'package:flutter_rest_api/pages/login_page.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rest_api/pages/register_page.dart';
+import 'package:flutter_rest_api/pages/splash_page.dart';
 
 void main() {
   DependencyInjection.initialize();
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginPage(),
+      home: SplashPage(),
       routes: {
         RegisterPage.routeNAme : (_) => RegisterPage(),
         LoginPage.routeName : (_) => LoginPage(),

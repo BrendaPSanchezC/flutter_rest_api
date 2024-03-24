@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rest_api/api/authentication_api.dart';
+import 'package:flutter_rest_api/data/authentication_client.dart';
 import 'package:flutter_rest_api/pages/home_page.dart';
 import 'package:flutter_rest_api/utils/dialogs.dart';
 import 'package:flutter_rest_api/utils/responsive.dart';
@@ -11,9 +12,8 @@ class LoginForm extends StatefulWidget {
  _LoginFormState createState() => _LoginFormState();
 }
 class _LoginFormState extends State<LoginForm> {
-  
-
-
+  final _authenticationAPI=GetIt.instance<AuthenticationAPI>();
+  final _authenticationClient = GetIt.instance<AuthenticationClient>();
   GlobalKey<FormState> _formKey = GlobalKey();
   String _email='', _password='';
 
@@ -23,13 +23,13 @@ class _LoginFormState extends State<LoginForm> {
 
  if(isOk){
   ProgressDialog.show(context);
-  final authenticationAPI=GetIt.instance<AuthenticationAPI>();
- final response =await authenticationAPI.login(
+ final response =await _authenticationAPI.login(
   email: _email,
   password: _password,
   );
   ProgressDialog.dissmiss(context);
   if(response.data != null){
+   await _authenticationClient.saveSession(response.data!);
     Navigator.pushNamedAndRemoveUntil(
       context,
        HomePage.routeName,
